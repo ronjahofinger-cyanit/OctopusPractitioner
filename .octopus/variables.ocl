@@ -11,7 +11,7 @@ variable "Project.Database.Name" {
         environment = ["production"]
     }
 
-    value "Trident_#{Octopus.Environment.Name}" {}
+    value "Trident_#{Store.Tenant.Abbr}_#{Octopus.Environment.Name}" {}
 }
 
 variable "Project.Database.Report.Path" {
