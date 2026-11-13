@@ -11,13 +11,13 @@ variable "Project.Database.Name" {
         environment = ["production"]
     }
 
-    value "Trident_#{Octopus.Environment.Name}" {}
-}
-
-variable "Project.Database.Report.Path" {
-    value "C:\\DatabaseReports\\\\#{Octopus.Environment.Name}" {}
+    value "Trident_#{Store.Tenant.Abbr}_#{Octopus.Environment.Name}" {}
 }
 
 variable "Project.Database.Server.Name" {
     value "(localdb)\\MSSQLLocalDB" {}
+}
+
+variable "Project.Database.Report.Path" {
+    value "C:\\DatabaseReports\\\\#{Store.Tenant.Abbr}\\\\#{Octopus.Environment.Name}" {}
 }

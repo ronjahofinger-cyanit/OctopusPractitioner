@@ -33,6 +33,7 @@ step "create-database-via-runbook" {
             Run.Runbook.Name = "Configure SQL Server"
             Run.Runbook.Project.Name = "#{Octopus.Project.Name}"
             Run.Runbook.Space.Name = "#{Octopus.Space.Name}"
+            Run.Runbook.Tenant.Name = "#{Octopus.Deployment.Tenant.Name}"
             Run.Runbook.UsePublishedSnapShot = "True"
             Run.Runbook.Waitforfinish = "True"
         }
@@ -86,7 +87,9 @@ step "dba-review-delta-script" {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Please review the database changes from the artifact attached to this deployment."
             Octopus.Action.Manual.ResponsibleTeamIds = "global/octopus-managers"
+            Octopus.Action.RunOnServer = "false"
         }
+        tenant_tags = ["Trident Tenant Type/Pseudo"]
     }
 }
 
@@ -136,6 +139,7 @@ step "deploy-trident-web-application" {
             Octopus.Action.Package.FeedId = "octopus-server-built-in"
             Octopus.Action.Package.JsonConfigurationVariablesTargets = "appSettings.json"
             Octopus.Action.Package.PackageId = "Trident.Web"
+            Octopus.Action.RunOnServer = "false"
         }
         worker_pool_variable = ""
 
@@ -160,6 +164,23 @@ step "verify-deloyment-of-trident-web" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
             OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "hosted-windows"
+    }
+}
+
+step "update-load-balancer" {
+    name = "Update Load Balancer"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $releaseNumber = $OctopusParameters["Octopus.Release.Number"]
+                Write-Highlight "Updated the load balancer to point to version $releaseNumber of the application"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
         }
         worker_pool = "hosted-windows"
     }
