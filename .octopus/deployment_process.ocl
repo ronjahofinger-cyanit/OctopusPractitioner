@@ -89,6 +89,7 @@ step "dba-review-delta-script" {
             Octopus.Action.Manual.ResponsibleTeamIds = "global/octopus-managers"
             Octopus.Action.RunOnServer = "false"
         }
+        tenant_tags = ["Trident Tenant Type/Pseudo"]
     }
 }
 
