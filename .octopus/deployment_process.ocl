@@ -3,7 +3,7 @@ step "calculate-deployment-mode" {
 
     action {
         properties = {
-            Octopus.Action.Template.Id = "ActionTemplates-644"
+            Octopus.Action.Template.Id = "ActionTemplates-729"
             Octopus.Action.Template.Version = "5"
         }
         worker_pool = "hosted-windows"
